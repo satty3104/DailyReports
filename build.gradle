@@ -1,0 +1,99 @@
+buildscript {
+  ext {
+    springBootVersion = '1.3.3.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+    classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot' 
+apply plugin: 'io.spring.dependency-management' 
+apply plugin: 'findbugs'
+
+jar {
+  baseName = 'dailyreports'
+  version = '1.0.0'
+}
+
+findbugs {
+  toolVersion = '3.0.1'
+  ignoreFailures = true
+  reportsDir = file("$project.buildDir/reports/findbugs")
+  effort = "max"
+}
+
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled = true
+    html.enabled = true
+  }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+mainClassName = 'hoge'
+
+configurations {
+  // slf4j + Logback を使うので、 commons-logging は除外する
+  all*.exclude group: 'commons-logging', module: 'commons-logging'
+}
+
+dependencies {
+  // Spring XXX
+  compile('org.springframework.boot:spring-boot-starter-actuator')
+  compile('org.springframework.boot:spring-boot-starter-aop')
+  compile('org.springframework.boot:spring-boot-starter-mail')
+  compile('org.springframework.boot:spring-boot-starter-web')
+  compile('org.springframework.boot:spring-boot-starter-websocket')
+  compile('org.springframework.boot:spring-boot-starter-jdbc')
+
+  // logback
+  compile('ch.qos.logback:logback-access:1.1.3')
+  compile('org.codehaus.janino:janino:2.7.8') // logback.xml で条件分岐を使うために必要
+
+  // DBFlute
+  compile('org.dbflute:dbflute-runtime:1.1.1')
+  compile('mysql:mysql-connector-java:5.1.38')
+
+  // Lombok
+  compile('org.projectlombok:lombok:1.16.6')
+
+  // Unit Testing
+  testCompile('org.springframework.boot:spring-boot-starter-test') 
+}
+
+eclipseJdt << {
+  File f = file('.settings/org.eclipse.core.resources.prefs')
+  f.write('eclipse.preferences.version=1\n')
+  f.append('encoding//src/main/java=UTF-8\n')
+  f.append('encoding//src/main/resources=UTF-8\n')
+  f.append('encoding//src/test/java=UTF-8\n')
+  f.append('encoding//src/test/resources=UTF-8\n')
+  f.append('encoding/<project>=UTF-8')
+
+  f = file('.settings/org.eclipse.core.runtime.prefs')
+  f.write('eclipse.preferences.version=1\n')
+  f.append('line.separator=\\n')
+}
+cleanEclipseJdt << {
+  file('.settings/org.eclipse.core.runtime.prefs').delete()
+  file('.settings/org.eclipse.core.resources.prefs').delete()
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.11'
+}
