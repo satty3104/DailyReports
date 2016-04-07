@@ -120,3 +120,181 @@ mysql> show tables;
 ```
 {"status":"UP","diskSpace":{"status":"UP","total":120860962816,"free":69629513728,"threshold":10485760},"db":{"status":"UP","database":"MySQL","hello":1}}
 ```
+
+# ブランチのルール
+- clone したばかりだと、masterブランチしかないので、自分のメインブランチを作成します
+
+```
+$ git checkout -b <name>-work master ← <name>には自分の名前を入れる
+$ git push origin <name>-work
+```
+
+- さらに、作業用トピックブランチを作成
+
+```
+$ git checkout -b feature-add-getReportList-<name> <name>-work
+                                            ↑ わかりやすいように自分の名前を入れておく
+```
+
+- トピックブランチ上で開発・コミットなどなどをします
+- ある程度機能が仕上がって動確も終わったら、Push
+
+```
+$ git push origin feature-add-getReportList-<name>
+```
+
+- Githubの画面から、プルリクエストを出してください
+  feature-add-getReportList-<name> を <name>-work にマージするように指定する
+
+- さあ、レビューの時間です
+- レビュー後修正が終わったら、トピックブランチが自分のメインブランチにマージされる
+- また、トピックブランチを作成して、開発を続けてください
+
+# 作ってほしい日報APIの仕様
+
+## 共通
+- RESTfulです
+- サンプルなので認証とかは無し
+- APIを直接叩くときはPostmanとかを使ってみてください  
+  https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop
+
+## 各エンドポイントの仕様
+
+### GET /reports/
+- すべての日報を返却します
+- 0件の場合は空の配列を返却
+- レスポンス
+
+```
+GET /reports/
+
+200 OK
+[
+  {
+    "id": 1,
+    "subject": "4/1",
+    "body": "今日はそんなに働かなかった",
+    "writer": "山田太郎",
+    "published_at": "20160401120000"
+  },
+  {
+    "id": 2,
+    "subject": "4/1",
+    "body": "きょうもよく働いた",
+    "writer": "山田次郎",
+    "published_at": "20160401130000"
+  },
+]
+```
+
+### GET /reports/:id
+- 1件の日報を返却します
+- 存在しない場合は、HTTPステータスコード404を返却
+- レスポンス
+
+```
+GET /reports/2
+
+200 OK
+{
+  "id": 2,
+  "subject": "4/1",
+  "body": "きょうもよく働いた",
+  "writer": "山田次郎",
+  "published_at": "20160401130000"
+}
+```
+
+### POST /reports/
+- 1件の日報を作成します
+- バリデーション
+  - 件名（subject）：最大100文字、必須
+  - 本文（body）：最大5000文字
+  - 筆者（writer）：最大50文字、必須
+  - 公開日時（published_at）：YYYYMMDDhhmmss（24h表記）、ここに指定した時刻以降に公開、nullの場合非公開
+- リクエスト
+
+```
+POST /reports/
+
+{
+  "subject": "4/2",
+  "body": "きょうはすごく働いた",
+  "writer": "山田次郎",
+  "published_at": "20160402230000"
+}
+```
+
+- レスポンス
+
+```
+成功時
+200 OK
+{
+  "id": 3,
+  "subject": "4/2",
+  "body": "きょうはすごく働いた",
+  "writer": "山田次郎",
+  "published_at": "20160402230000"
+}
+
+失敗時
+400 Bad Request
+{
+  "code": "PARAMTER_ERROR",
+  "errors" : [
+    {
+      "code" : "REQUIRED",
+      "fields": [
+        "subject"
+      ],
+      "message": "[subject] cannot be blank"
+    }
+  ]
+}
+```
+
+### PUT /reports/:id
+- 1件の日報を更新します
+- バリデーションは登録時と同じ
+- リクエスト
+
+```
+PUT /reports/3
+
+{
+  "id": 3,
+  "subject": "4/2",
+  "body": "きょうはすごく働いた。つかれたー",
+  "writer": "山田次郎",
+  "published_at": "20160402230000"
+}
+```
+
+- レスポンス
+
+```
+成功時
+200 OK
+{
+  "id": 3,
+  "subject": "4/2",
+  "body": "きょうはすごく働いた。つかれたー",
+  "writer": "山田次郎",
+  "published_at": "20160402230000"
+}
+
+失敗時は登録と同じ
+```
+
+### DELETE /reports/:id
+- 1件の日報を削除します
+- すでに削除済みなど、存在しない場合は、HTTPステータスコード404を返却
+- リクエスト・レスポンス
+
+```
+DELETE /reports/1
+
+成功時
+200 OK
+```
