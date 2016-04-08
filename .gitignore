@@ -105,6 +105,7 @@ gradle-app.setting
 dbflute_dailyreports/dfprop/root-password.txt
 dbflute_dailyreports/log/*
 !dbflute_dailyreports/log/_readme.txt
+!mydbflute/*/ant/bin/
 
 ### other ###
 # ER Master's DDL output
