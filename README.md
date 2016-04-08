@@ -21,6 +21,24 @@ $ sh gradlew eclipse
 
 ## DBのセットアップ
 - localhost で MySQL が起動していることが前提
+- DBスキーマを先に作っておく
+
+```
+$ mysql -uroot -p
+
+mysql> create database dailyreports character set utf8;
+Query OK, 1 row affected (0.05 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| dailyreports       |
++--------------------+
+2 rows in set (0.01 sec)
+```
+
 - root ユーザのパスワード設定ファイルを作成
 
 ```
@@ -56,33 +74,11 @@ What is your favorite task? (number):
 ```
 - SUCCESSと出ればOK
   - ユーザ：dailyreports（パスワードはapplication.propertiesあたりを見てください）
-  - スキーマ：dailyreports
   - テーブル：reports
   - ができているはず
 
 ```
-$ mysql -udailyreports -p
-Enter password: ************
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 36
-Server version: 5.7.11-log MySQL Community Server (GPL)
-
-Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
-mysql> show databases;
-+--------------------+
-| Database           |
-+--------------------+
-| information_schema |
-| dailyreports       |
-+--------------------+
-2 rows in set (0.01 sec)
+$ mysql -udailyreports -p ← ログインできる
 
 mysql> use dailyreports;
 Database changed
@@ -95,6 +91,7 @@ mysql> show tables;
 +------------------------+
 1 row in set (0.00 sec)
 ```
+
 ## とりあえず起動してみる
 - `src/main/java/proj/sample/dailyreport/Bootstrap.java` の main メソッドを実行
 
