@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Edit Report</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+</head>
+<body ng-app="editReport">
+	<header>
+		<p><a href="../">&gt;&gt; All Reports</a></p>
+	</header>
+	<h1>Edit Report</h1>
+	<form method="post">
+		<table border="0">
+			<tr>
+				<td>ID：</td>
+				<td>{{DailyReportres.id}}</td>
+			</tr>
+			<tr>
+				<td>件名：</td>
+				<td><input ng-model="DailyReportPos.subject" type="text" size="50" /></td>
+			</tr>
+			<tr>
+				<td>本文：</td>
+				<td><textarea ng-model="DailyReportPos.body" rows="6" cols="50"></textarea></td>
+			</tr>
+			<tr>
+				<td>筆者：</td>
+				<td><input ng-model="DailyReportPos.writer" type="text" size="30" /></td>
+			</tr>
+			<tr>
+				<td>公開日時：</td>
+				<td><input ng-model="DailyReportPos.published_at" type="text" size="20" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<p><input type="submit" value="更新" ng-click="editReport()" /></p>
+					<p><input type="submit" value="この日報を削除" ng-click="deleteReport()" /></p>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

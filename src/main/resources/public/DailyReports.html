@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>DailyReports</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+	<script src="DailyReports.js"></script>
+</head>
+<body ng-app="DailyReportsApp">
+	<h1>DailyReports</h1>
+	<h2>Post Report</h2>
+	<form ng-controller="AddReportCtrl">
+		<table border="0">
+			<tr>
+				<td>件名：</td>
+				<td><input ng-model="DailyReportPos.subject" type="text" size="40" /></td>
+			</tr>
+			<tr>
+				<td>本文：</td>
+				<td><textarea ng-model="DailyReportPos.body" rows="6" cols="50"></textarea></td>
+			</tr>
+			<tr>
+				<td>筆者：</td>
+				<td><input ng-model="DailyReportPos.writer" type="text" size="30" /></td>
+			</tr>
+			<tr>
+				<td>公開日時：</td>
+				<td><input ng-model="DailyReportPos.published_at" type="text" size="20" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" value="送信" ng-click="postReport()" />
+					<input type="reset" value="リセット" />
+				</td>
+			</tr>
+		</table>
+	</form>
+	<h2>Edit Report</h2>
+	<form>
+		ID: <input ng-model="id" type="text" size="10" />
+		<button ng-click="selectReport()">編集</button>
+	</form>
+	<h2>All Reports</h2>
+	<div ng-controller="DaliyReportsCtrl">
+		<div ng-repeat="report in DailyReportRes">
+			<table border="0">
+				<tr>
+					<td>ID：</td>
+					<td>{{report.id}}</td>
+				</tr>
+				<tr>
+					<td>件名：</td>
+					<td>{{report.subject}}</td>
+				</tr>
+				<tr>
+					<td>本文：</td>
+					<td>{{report.body}}</td>
+				</tr>
+				<tr>
+					<td>筆者：</td>
+					<td>{{report.writer}}</td>
+				</tr>
+				<tr>
+					<td>公開日時：</td>
+					<td>{{report.published_at}}</td>
+				</tr>
+			</table>
+			<p>----------------------------------------------</p>
+		</div>
+	</div>
+</body>
+</html>

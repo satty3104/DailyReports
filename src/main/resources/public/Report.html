@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>DailyReports</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+	<script src="Reports.js"></script>
+</head>
+<body ng-app="ReportsApp">
+	<header>
+		<p><a href="../">&gt;&gt; All Reports</a></p>
+	</header>
+	<h1>Post Report</h1>
+	<h2>{{status}}</h2>
+	<table border="0" g-controller="ReportsCtrl">
+		<tr>
+			<td>ID：</td>
+			<td>{{report.id}}</td>
+		</tr>
+		<tr>
+			<td>件名：</td>
+			<td>{{report.subject}}</td>
+		</tr>
+		<tr>
+			<td>本文：</td>
+			<td>{{report.body}}</td>
+		</tr>
+		<tr>
+			<td>筆者：</td>
+			<td>{{report.writer}}</td>
+		</tr>
+		<tr>
+			<td>公開日時：</td>
+			<td>{{report.published_at}}</td>
+		</tr>
+	</table>
+</body>
+</html>
