@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>DailyReports</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+	<script src="DailyReports.js"></script>
+</head>
+<body ng-controller="DaliyReportsCtrl" ng-app="DailyReportsApp">
+	<form name="ReportInsertForm" ng-submit="onsubmit()" method="post"
+		novalidate>
+		<div>
+			<label for="subject">件名：</label><br />
+			<!--2検証ルールを指定-->
+			<input id="subject" name="subject" type="text"
+				ng-model="ReportInsertForm.subject" required ng-maxlength="100" />
+			<!--3検証エラーメッセージを表示-->
+			<span ng-show="ReportInsertForm.subject.$error.required">
+				件名は必須です。</span> <span ng-show="ReportInsertForm.subject.$error.maxlength">
+				件名は100文字以内で入力してください。</span>
+		</div>
+		<div>
+			<label for="body">本文：</label><br />
+			<textarea id="body" name="body" type="text" rows="6" cols="50"
+				ng-model="ReportInsertForm.body" required ng-maxlength="5000" /></textarea>
+			<span ng-show="ReportInsertForm.body.$error.required">
+				本文は必須です。</span> <span ng-show="ReportInsertForm.body.$error.max">
+				本文は5000文字以内で入力してください。</span>
+		</div>
+		<div>
+			<label for="writer">筆者：</label><br /> <input id="writer"
+				name="writer" type="text" ng-model="ReportInsertForm.writer"
+				required /> <span ng-show="ReportInsertForm.writer.$error.required">
+				筆者は必須です。</span>
+		</div>
+		<div>
+			<label for="published_at">公開日時：</label><br /> <input
+				id="published_at" name="published_at" type="datetime"
+				ng-model="ReportInsertForm.published_at" required />
+		</div>
+		<div>
+			<!--4フォーム全体の検証が成功していればクリック可能に-->
+			<input type="submit" value="登録"
+				ng-disabled="ReportInsertForm.$invalid" ng-click="reportInsert()" />
+		</div>
+	</form>
+
+</body>
+</html>
